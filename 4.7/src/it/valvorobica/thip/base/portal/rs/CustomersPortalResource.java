@@ -1,5 +1,6 @@
 package it.valvorobica.thip.base.portal.rs;
 
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
@@ -32,6 +33,7 @@ public class CustomersPortalResource extends BaseResource {
 	
 	public static CustomersPortalService service = CustomersPortalService.getInstance();
 
+	@PermitAll
 	@GET
 	@Path("/capparioSusa")
 	public Response listaCappario(@QueryParam("query") String query,

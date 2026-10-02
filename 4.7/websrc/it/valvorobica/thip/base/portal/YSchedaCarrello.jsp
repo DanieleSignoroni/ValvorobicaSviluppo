@@ -258,12 +258,12 @@ try {
 	       </div>
           <div class="row mt-4">
             <div class="col">
-              <label class="form-label">Modalit√† di consegna</label>
+              <label class="form-label">Modalit‡† di consegna</label>
               <select class="form-select mb-2" name="deliveryMethod" id="deliveryMethod" required disabled></select>
               <input type="hidden" name="IdModalitaConsegna" id="IdModalitaConsegnaHiddenInputValue">
             </div>
             <div class="col">
-              <label class="form-label">Modalit√† di spedizione</label>
+              <label class="form-label">Modalit‡† di spedizione</label>
               <select class="form-select mb-2" name="IdModalitaSpedizione" id="shipmentMethod" required></select>
               <input type="hidden" name="IdModalitaSpedizione" id="IdModalitaSpedizioneHiddenInputValue">
             </div>
@@ -284,7 +284,7 @@ try {
               <input class="form-control location-search" type="text" name="CAP" id="CAP" required autocomplete="off" aria-autocomplete="list" aria-controls="locationAutocompleteResults">
             </div>
             <div class="col location-autocomplete">
-              <label class="form-label">Localit√†</label>
+              <label class="form-label">Localit‡†</label>
               <input class="form-control location-search" type="text" name="Localita" id="Localita" required autocomplete="off" aria-autocomplete="list" aria-controls="locationAutocompleteResults">
             </div>
             <div class="col location-autocomplete">
@@ -350,7 +350,6 @@ try {
     var items = <%=YUserPortalSession.getNumeroItemsCarrelloUtente(userPortalSession.getIdAzienda(), userPortalSession.getIdUtente())%>;
     var company = "<%=userPortalSession.getIdAzienda()%>";
     var idCliente = "<%=userPortalSession.getIdCliente()%>";
-    var capparioResourceUrl = "<%=webAppPath%>/rest/customersPortal/capparioSusa";
 
     $(document).ready(function() {
         // Initialize your JavaScript file

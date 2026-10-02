@@ -416,7 +416,7 @@ function initLocationAutocomplete() {
 			pendingRequest.abort();
 		}
 		var request = $.ajax({
-			url: capparioResourceUrl,
+			url: getURLREST() + "/api/customersPortal/capparioSusa",
 			method: 'GET',
 			dataType: 'json',
 			data: { query: query, limit: 20 }
@@ -778,5 +778,15 @@ function getURLWS() {
 	ris = url.substring(0, cut);
 	ris += wbAppPth;
 	ris += "/ws";
+	return ris;
+}
+
+function getURLREST() {
+	let ris;
+	let url = window.location.href;
+	let wbAppPth = parent.document.getElementById('webAppPath').value;
+	let cut = url.indexOf(wbAppPth);
+	ris = url.substring(0, cut);
+	ris += wbAppPth;
 	return ris;
 }

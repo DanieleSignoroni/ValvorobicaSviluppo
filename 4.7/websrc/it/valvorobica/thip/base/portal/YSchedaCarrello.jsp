@@ -103,6 +103,21 @@ try {
 .location-autocomplete-option { padding: .5rem .75rem; cursor: pointer; }
 .location-autocomplete-option:hover,
 .location-autocomplete-option.active { color: #fff; background: #007bff; }
+.location-search-help { position: relative; display: inline-flex; margin-left: .35rem; vertical-align: middle; }
+.location-search-help-button {
+	display: inline-flex; align-items: center; justify-content: center;
+	width: 1.1rem; height: 1.1rem; padding: 0;
+	color: #007bff; background: transparent; border: 1px solid #007bff;
+	border-radius: 50%; font-size: .75rem; font-weight: 700; line-height: 1;
+}
+.location-search-help-text {
+	display: none; position: absolute; z-index: 1070; bottom: calc(100% + .5rem); left: 50%;
+	width: 280px; padding: .65rem .75rem; transform: translateX(-50%);
+	color: #fff; background: #343a40; border-radius: .25rem;
+	box-shadow: 0 .25rem .5rem rgba(0, 0, 0, .2); font-size: .8rem; font-weight: 400;
+}
+.location-search-help:hover .location-search-help-text,
+.location-search-help:focus-within .location-search-help-text { display: block; }
 </style>
 <%=com.thera.thermfw.web.WebJSTypeList.getImportForJSLibrary("it/valvorobica/thip/base/portal/js/jquery.js", request)%>
 <%=com.thera.thermfw.web.WebJSTypeList.getImportForJSLibrary("it/valvorobica/thip/base/portal/js/modal_utils.js", request)%>
@@ -258,12 +273,16 @@ try {
 	       </div>
           <div class="row mt-4">
             <div class="col">
-              <label class="form-label">Modalit� di consegna</label>
-              <select class="form-select mb-2" name="deliveryMethod" id="deliveryMethod" required disabled></select>
-              <input type="hidden" name="IdModalitaConsegna" id="IdModalitaConsegnaHiddenInputValue">
-            </div>
+              <label class="form-label" for="CAP">CAP</label>
+              <span class="location-search-help">
+                <button type="button" class="location-search-help-button" aria-label="Come cercare CAP e localit&agrave;" aria-describedby="locationSearchHelp">i</button>
+                <span id="locationSearchHelp" class="location-search-help-text" role="tooltip">Digita almeno 2 caratteri in uno dei campi CAP, Localit&agrave; o Provincia, poi seleziona un risultato: il sistema compiler&agrave; automaticamente tutti e tre i campi. Non &egrave; necessario inserire manualmente il CAP.</span>
+              </span>
+              <div id="locationAutocompleteResults" class="location-autocomplete-results" role="listbox" aria-label="Localit&agrave; disponibili"></div>
+              <label class="form-label" for="Localita">Localit&agrave;</label>
+              <label class="form-label" for="Provincia">Provincia</label>
             <div class="col">
-              <label class="form-label">Modalit� di spedizione</label>
+              <label class="form-label">Modalità  di spedizione</label>
               <select class="form-select mb-2" name="IdModalitaSpedizione" id="shipmentMethod" required></select>
               <input type="hidden" name="IdModalitaSpedizione" id="IdModalitaSpedizioneHiddenInputValue">
             </div>
@@ -284,13 +303,13 @@ try {
               <input class="form-control location-search" type="text" name="CAP" id="CAP" required autocomplete="off" aria-autocomplete="list" aria-controls="locationAutocompleteResults">
             </div>
             <div class="col location-autocomplete">
-              <label class="form-label">Localit�</label>
+              <label class="form-label">Località </label>
               <input class="form-control location-search" type="text" name="Localita" id="Localita" required autocomplete="off" aria-autocomplete="list" aria-controls="locationAutocompleteResults">
             </div>
             <div class="col location-autocomplete">
               <label class="form-label">Provincia</label>
               <input class="form-control location-search" type="text" name="Provincia" id="Provincia" required autocomplete="off" aria-autocomplete="list" aria-controls="locationAutocompleteResults">
-              <div id="locationAutocompleteResults" class="location-autocomplete-results" role="listbox" aria-label="Località disponibili"></div>
+              <div id="locationAutocompleteResults" class="location-autocomplete-results" role="listbox" aria-label="LocalitÃ  disponibili"></div>
             </div>
           </div>
           <input name="vsNr" id="vsNr" class="form-control mt-2" placeholder="Vs. Numero Ordine" required maxlength="15" />

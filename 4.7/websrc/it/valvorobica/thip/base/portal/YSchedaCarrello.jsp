@@ -103,11 +103,11 @@ try {
 .location-autocomplete-option { padding: .5rem .75rem; cursor: pointer; }
 .location-autocomplete-option:hover,
 .location-autocomplete-option.active { color: #fff; background: #007bff; }
-.location-search-help { position: relative; display: inline-block; margin-left: .35rem; vertical-align: middle; }
-.location-search-help-icon {
+.location-search-help { position: relative; display: inline-flex; margin-left: .35rem; vertical-align: middle; }
+.location-search-help-button {
 	display: inline-flex; align-items: center; justify-content: center;
-	width: 1.1rem; height: 1.1rem;
-	color: #007bff; border: 1px solid #007bff; cursor: help;
+	width: 1.1rem; height: 1.1rem; padding: 0;
+	color: #007bff; background: transparent; border: 1px solid #007bff;
 	border-radius: 50%; font-size: .75rem; font-weight: 700; line-height: 1;
 }
 .location-search-help-text {
@@ -275,7 +275,7 @@ try {
             <div class="col">
               <label class="form-label" for="CAP">CAP</label>
               <span class="location-search-help">
-                <span class="location-search-help-icon" tabindex="0" aria-label="Come cercare CAP e localit&agrave;" aria-describedby="locationSearchHelp">i</span>
+                <button type="button" class="location-search-help-button" aria-label="Come cercare CAP e localit&agrave;" aria-describedby="locationSearchHelp">i</button>
                 <span id="locationSearchHelp" class="location-search-help-text" role="tooltip">Digita almeno 2 caratteri in uno dei campi CAP, Localit&agrave; o Provincia, poi seleziona un risultato: il sistema compiler&agrave; automaticamente tutti e tre i campi. Non &egrave; necessario inserire manualmente il CAP.</span>
               </span>
               <div id="locationAutocompleteResults" class="location-autocomplete-results" role="listbox" aria-label="Localit&agrave; disponibili"></div>

@@ -16,9 +16,12 @@ function initCheckout() {
 		"pageLength": 50,
 		dom: 'Blfrtip',
 		buttons: [{
-			className: 'btn btn-secondary btn-sm',
+			className: 'btn btn-secondary btn-sm proceed-checkout-button',
 			text: 'Procedi',
 			action: function() {
+				if (taxableAmount < minimumOrderAmount) {
+					return;
+				}
 				resetProgressAndForm();
 				$('#modalWarningCheckOut').modal('show');
 			}
@@ -26,6 +29,7 @@ function initCheckout() {
 		initComplete: function() {
 			let btns = $('.dt-button');
 			btns.removeClass('dt-button');
+			updateProceedButton();
 		},
 		columnDefs: [
 			{ orderable: false },
@@ -116,6 +120,23 @@ function initCheckout() {
 	});;
 
 	$summaryDiv = $('#summarySection');
+}
+
+function updateProceedButton() {
+	var $proceedButton = $('.proceed-checkout-button');
+	var $minimumOrderMessage = $('#minimumOrderMessage');
+	var isMinimumOrderReached = taxableAmount >= minimumOrderAmount;
+
+	$minimumOrderMessage.insertAfter($proceedButton);
+	$proceedButton
+		.prop('disabled', !isMinimumOrderReached)
+		.attr('aria-disabled', String(!isMinimumOrderReached));
+
+	if (isMinimumOrderReached) {
+		$minimumOrderMessage.hide();
+	} else {
+		$minimumOrderMessage.stop(true, true).fadeIn(300);
+	}
 }
 
 function handleCheckoutFormSubmit(event) {

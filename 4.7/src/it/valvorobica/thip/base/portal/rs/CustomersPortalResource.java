@@ -34,8 +34,9 @@ public class CustomersPortalResource extends BaseResource {
 
 	@GET
 	@Path("/capparioSusa")
-	public Response listaNazioni(@QueryParam("Query") String query) {
-		JSONObject result = service.capparioSusa(query);
+	public Response listaCappario(@QueryParam("query") String query,
+			@QueryParam("limit") Integer limit) {
+		JSONObject result = service.capparioSusa(query, limit);
 		return buildResponse((StatusType) result.get("status"),result.get("response"));
 	}
 	

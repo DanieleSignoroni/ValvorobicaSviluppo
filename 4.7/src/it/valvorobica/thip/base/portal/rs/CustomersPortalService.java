@@ -36,6 +36,9 @@ import it.valvorobica.thip.susa.CapparioSusaTM;
  */
 
 public class CustomersPortalService {
+	private static final int DEFAULT_RESULT_LIMIT = 20;
+	private static final int MAX_RESULT_LIMIT = 50;
+	private static final int MIN_QUERY_LENGTH = 2;
 
 	private static CustomersPortalService instance = null;
 
@@ -57,7 +60,7 @@ public class CustomersPortalService {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public JSONObject capparioSusa(String query) {
+	public JSONObject capparioSusa(String query, Integer requestedLimit) {
 		JSONObject response = new JSONObject();
 		Status status = Status.OK;
 		List errors = new ArrayList();
@@ -65,21 +68,27 @@ public class CustomersPortalService {
 		JSONArray provinceAsJSON = new JSONArray();
 
 		try {
-			String where = "";
-			if (query != null && !query.trim().isEmpty()) {
-				String safeQuery = query.trim().replace("'", "''");
+			String normalizedQuery = query == null ? "" : query.trim();
+			int resultLimit = requestedLimit == null ? DEFAULT_RESULT_LIMIT
+					: Math.max(1, Math.min(requestedLimit.intValue(), MAX_RESULT_LIMIT));
+
+			// Non restituiamo l'intero cappario (circa 15.000 righe): l'autocomplete
+			// interroga il server soltanto quando l'utente ha digitato almeno 2 caratteri.
+			if (normalizedQuery.length() >= MIN_QUERY_LENGTH) {
+				String safeQuery = normalizedQuery.replace("'", "''");
 				safeQuery = safeQuery.toUpperCase();
-				where = " (" +
+				String where = " (" +
 						ConnectionManager.getCurrentDatabase().getCallToUppercaseFn(CapparioSusaTM.ID_PROVINCIA) + " LIKE '%" + safeQuery + "%' OR " +
 						ConnectionManager.getCurrentDatabase().getCallToUppercaseFn(CapparioSusaTM.LOCALITA) + " LIKE '%" + safeQuery + "%' OR " +
 						ConnectionManager.getCurrentDatabase().getCallToUppercaseFn(CapparioSusaTM.CAP) + " LIKE '%" + safeQuery + "%') ";
-			}
+				Vector province = CapparioSusa.retrieveList(where,
+						CapparioSusaTM.LOCALITA + " ASC, " + CapparioSusaTM.CAP + " ASC", false);
+				for (Iterator iterator = province.iterator(); iterator.hasNext()
+						&& provinceAsJSON.length() < resultLimit;) {
+					CapparioSusa cappario = (CapparioSusa) iterator.next();
 
-			Vector province = CapparioSusa.retrieveList(where, CapparioSusaTM.ID_PROVINCIA +" ASC", false);
-			for (Iterator iterator = province.iterator(); iterator.hasNext();) {
-				CapparioSusa cappario = (CapparioSusa) iterator.next();
-
-				provinceAsJSON.put(toJSON(cappario));
+					provinceAsJSON.put(toJSON(cappario));
+				}
 			}
 
 			data.put("cappario", provinceAsJSON);

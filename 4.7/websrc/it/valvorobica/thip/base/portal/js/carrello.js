@@ -42,6 +42,7 @@ function initCheckout() {
 	populateShipmentMethods();
 	populateShippers();
 	populateDatiDestinazione();
+	initLocationAutocomplete();
 
 	$('#shipmentMethod').on('change', function() {
 		const selectedValue = $(this).val();
@@ -361,6 +362,104 @@ function populateDatiDestinazione() {
 		if (datiDestinazione.Provincia != undefined)
 			document.getElementById('Provincia').value = datiDestinazione.Provincia.trim();
 	}
+}
+
+function initLocationAutocomplete() {
+	var $inputs = $('.location-search');
+	var $results = $('#locationAutocompleteResults');
+	var queryCache = {};
+	var pendingRequest = null;
+	var debounceTimer = null;
+
+	function closeResults() {
+		$results.empty();
+		$inputs.attr('aria-expanded', 'false');
+	}
+
+	function selectLocation(location) {
+		$('#CAP').val(location.CAP || '');
+		$('#Localita').val(location.localita || '');
+		$('#Provincia').val(location.idProvincia || '');
+		closeResults();
+	}
+
+	function showResults(locations) {
+		closeResults();
+		locations.forEach(function(location) {
+			var label = [location.CAP, location.localita, location.idProvincia]
+				.filter(function(value) { return value; }).join(' - ');
+			$('<div>', {
+				'class': 'location-autocomplete-option',
+				'role': 'option',
+				'tabindex': 0,
+				'text': label
+			}).on('mousedown', function(event) {
+				event.preventDefault();
+				selectLocation(location);
+			}).on('keydown', function(event) {
+				if (event.key === 'Enter' || event.key === ' ') {
+					event.preventDefault();
+					selectLocation(location);
+				}
+			}).appendTo($results);
+		});
+		$inputs.attr('aria-expanded', locations.length > 0 ? 'true' : 'false');
+	}
+
+	function search(query) {
+		var cacheKey = query.toUpperCase();
+		if (queryCache[cacheKey]) {
+			showResults(queryCache[cacheKey]);
+			return;
+		}
+		if (pendingRequest) {
+			pendingRequest.abort();
+		}
+		var request = $.ajax({
+			url: capparioResourceUrl,
+			method: 'GET',
+			dataType: 'json',
+			data: { query: query, limit: 20 }
+		});
+		pendingRequest = request;
+		request.done(function(response) {
+			var locations = response && response.cappario ? response.cappario : [];
+			queryCache[cacheKey] = locations;
+			showResults(locations);
+		}).fail(function(xhr, status) {
+			if (status !== 'abort') {
+				closeResults();
+			}
+		}).always(function() {
+			if (pendingRequest === request) {
+				pendingRequest = null;
+			}
+		});
+	}
+
+	$inputs.on('input', function() {
+		var query = $.trim(this.value);
+		clearTimeout(debounceTimer);
+		if (pendingRequest) {
+			pendingRequest.abort();
+			pendingRequest = null;
+		}
+		if (query.length < 2) {
+			closeResults();
+			return;
+		}
+		debounceTimer = setTimeout(function() { search(query); }, 300);
+	}).on('keydown', function(event) {
+		if (event.key === 'Escape') {
+			closeResults();
+		}
+	});
+
+	$(document).on('mousedown', function(event) {
+		if (!$(event.target).closest('.location-autocomplete').length) {
+			closeResults();
+		}
+	});
 }
 
 function populateShippers() {

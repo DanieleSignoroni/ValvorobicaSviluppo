@@ -91,6 +91,19 @@ try {
 <%=WebJSTypeList.getImportForCSS("it/valvorobica/thip/assets/DataTables/Select/css/select.dataTables.css", request)%>
 <%=WebJSTypeList.getImportForCSS("it/valvorobica/thip/assets/DataTables/Buttons/css/buttons.dataTables.css", request)%>
 <%=WebJSTypeList.getImportForCSS("it/valvorobica/thip/base/portal/css/carrello.css", request)%>
+<style>
+.location-autocomplete { position: relative; }
+.location-autocomplete-results {
+	position: absolute; z-index: 1060; top: 100%; right: 0; left: 0;
+	max-height: 240px; overflow-y: auto; background: #fff;
+	border: 1px solid #ced4da; border-radius: 0 0 .25rem .25rem;
+	box-shadow: 0 .25rem .5rem rgba(0, 0, 0, .15);
+}
+.location-autocomplete-results:empty { display: none; }
+.location-autocomplete-option { padding: .5rem .75rem; cursor: pointer; }
+.location-autocomplete-option:hover,
+.location-autocomplete-option.active { color: #fff; background: #007bff; }
+</style>
 <%=com.thera.thermfw.web.WebJSTypeList.getImportForJSLibrary("it/valvorobica/thip/base/portal/js/jquery.js", request)%>
 <%=com.thera.thermfw.web.WebJSTypeList.getImportForJSLibrary("it/valvorobica/thip/base/portal/js/modal_utils.js", request)%>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -245,12 +258,12 @@ try {
 	       </div>
           <div class="row mt-4">
             <div class="col">
-              <label class="form-label">Modalit‡ di consegna</label>
+              <label class="form-label">Modalit√† di consegna</label>
               <select class="form-select mb-2" name="deliveryMethod" id="deliveryMethod" required disabled></select>
               <input type="hidden" name="IdModalitaConsegna" id="IdModalitaConsegnaHiddenInputValue">
             </div>
             <div class="col">
-              <label class="form-label">Modalit‡ di spedizione</label>
+              <label class="form-label">Modalit√† di spedizione</label>
               <select class="form-select mb-2" name="IdModalitaSpedizione" id="shipmentMethod" required></select>
               <input type="hidden" name="IdModalitaSpedizione" id="IdModalitaSpedizioneHiddenInputValue">
             </div>
@@ -266,17 +279,18 @@ try {
               <label class="form-label">Indirizzo</label>
               <input class="form-control" type="text" name="Indirizzo" id="Indirizzo" required>
             </div>
-            <div class="col">
+            <div class="col location-autocomplete">
               <label class="form-label">CAP</label>
-              <input class="form-control" type="text" name="CAP" id="CAP" required>
+              <input class="form-control location-search" type="text" name="CAP" id="CAP" required autocomplete="off" aria-autocomplete="list" aria-controls="locationAutocompleteResults">
             </div>
-            <div class="col">
-              <label class="form-label">Localit‡</label>
-              <input class="form-control" type="text" name="Localita" id="Localita" required>
+            <div class="col location-autocomplete">
+              <label class="form-label">Localit√†</label>
+              <input class="form-control location-search" type="text" name="Localita" id="Localita" required autocomplete="off" aria-autocomplete="list" aria-controls="locationAutocompleteResults">
             </div>
-            <div class="col">
+            <div class="col location-autocomplete">
               <label class="form-label">Provincia</label>
-              <input class="form-control" type="text" name="Provincia" id="Provincia" required>
+              <input class="form-control location-search" type="text" name="Provincia" id="Provincia" required autocomplete="off" aria-autocomplete="list" aria-controls="locationAutocompleteResults">
+              <div id="locationAutocompleteResults" class="location-autocomplete-results" role="listbox" aria-label="Localit√† disponibili"></div>
             </div>
           </div>
           <input name="vsNr" id="vsNr" class="form-control mt-2" placeholder="Vs. Numero Ordine" required maxlength="15" />
@@ -336,6 +350,7 @@ try {
     var items = <%=YUserPortalSession.getNumeroItemsCarrelloUtente(userPortalSession.getIdAzienda(), userPortalSession.getIdUtente())%>;
     var company = "<%=userPortalSession.getIdAzienda()%>";
     var idCliente = "<%=userPortalSession.getIdCliente()%>";
+    var capparioResourceUrl = "<%=webAppPath%>/rest/customersPortal/capparioSusa";
 
     $(document).ready(function() {
         // Initialize your JavaScript file

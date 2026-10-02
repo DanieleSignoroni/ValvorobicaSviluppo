@@ -118,6 +118,10 @@ try {
 }
 .location-search-help:hover .location-search-help-text,
 .location-search-help:focus-within .location-search-help-text { display: block; }
+.minimum-order-message {
+	display: none; margin-left: .75rem; color: #dc3545;
+	font-size: .9rem; font-weight: 600; vertical-align: middle;
+}
 </style>
 <%=com.thera.thermfw.web.WebJSTypeList.getImportForJSLibrary("it/valvorobica/thip/base/portal/js/jquery.js", request)%>
 <%=com.thera.thermfw.web.WebJSTypeList.getImportForJSLibrary("it/valvorobica/thip/base/portal/js/modal_utils.js", request)%>
@@ -200,6 +204,7 @@ try {
         		</tfoot>
 			</table>
 		</div>
+		<span id="minimumOrderMessage" class="minimum-order-message" role="status" aria-live="polite">Ordine minimo: 50&euro;</span>
 		<div style="display: none" class="text-center">
 			<a href="#modalRemoveItem" id="removeItemClick" class="trigger-btn"
 				data-toggle="modal"></a>
@@ -367,6 +372,8 @@ try {
     var datiDestinazione = <%= datiDestinazione %>;
     var isVettoreRequired = <%= isVettoreRequired %>;
     var items = <%=YUserPortalSession.getNumeroItemsCarrelloUtente(userPortalSession.getIdAzienda(), userPortalSession.getIdUtente())%>;
+	var taxableAmount = <%=total.toPlainString()%>;
+	var minimumOrderAmount = 50;
     var company = "<%=userPortalSession.getIdAzienda()%>";
     var idCliente = "<%=userPortalSession.getIdCliente()%>";
 

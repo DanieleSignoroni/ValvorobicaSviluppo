@@ -32,7 +32,7 @@ import it.valvorobica.thip.susa.CapparioSusaTM;
 /*
  * Revisions:
  * Number   Date        Owner    Description
- * 72XXX    02/10/2026  DSSOF3   Prima stesura
+ * 72676    02/10/2026  DSSOF3   Prima stesura
  */
 
 public class CustomersPortalService {

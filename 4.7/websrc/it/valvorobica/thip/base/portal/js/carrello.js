@@ -19,8 +19,16 @@ function initCheckout() {
 			className: 'btn btn-secondary btn-sm',
 			text: 'Procedi',
 			action: function() {
-				resetProgressAndForm();
-				$('#modalWarningCheckOut').modal('show');
+				//72676 <
+				if (parseFloat(total) < parseFloat(minumunOrder)) {
+					openModal('txtWarning', $('#modalWarningClick',
+						parent.parent.document)[0], msgOrdineMinimo);
+					return;
+				//72676 >	
+				} else {
+					resetProgressAndForm();
+					$('#modalWarningCheckOut').modal('show');
+				}
 			}
 		}],
 		initComplete: function() {
@@ -364,6 +372,7 @@ function populateDatiDestinazione() {
 	}
 }
 
+//72676 <
 function initLocationAutocomplete() {
 	var $inputs = $('.location-search');
 	var $results = $('#locationAutocompleteResults');
@@ -461,6 +470,7 @@ function initLocationAutocomplete() {
 		}
 	});
 }
+//72676 >
 
 function populateShippers() {
 	let select = document.getElementById('shipper');
@@ -781,6 +791,7 @@ function getURLWS() {
 	return ris;
 }
 
+//72676 <
 function getURLREST() {
 	let ris;
 	let url = window.location.href;
@@ -790,3 +801,4 @@ function getURLREST() {
 	ris += wbAppPth;
 	return ris;
 }
+//72676 >

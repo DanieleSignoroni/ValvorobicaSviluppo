@@ -25,7 +25,7 @@ import com.thera.thermfw.rs.BaseResource;
 /*
  * Revisions:
  * Number   Date        Owner    Description
- * 72XXX    02/10/2026  DSSOF3   Prima stesura
+ * 72676    02/10/2026  DSSOF3   Prima stesura
  */
 
 @Path("/customersPortal")

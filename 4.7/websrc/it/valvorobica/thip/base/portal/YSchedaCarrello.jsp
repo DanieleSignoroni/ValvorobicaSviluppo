@@ -30,6 +30,10 @@ Object[] info = SessionEnvironment.getDBInfoFromIniFile();
 String dbName = (String) info[0];
 String newsHtml = null;
 BigDecimal total = BigDecimal.ZERO;
+//72676 <
+BigDecimal minumunOrder = BigDecimal.ZERO;
+String msgOrdineMinimo = "";
+//72676 >
 
 JSONObject deliveryMethods = null;
 JSONObject shipmentMethods = null;
@@ -58,6 +62,10 @@ try {
 	values = ws.send();
 	items = (ArrayList<YCarrello.ItemCarrello>) values.get("items");
 	total = (BigDecimal) values.get("total");
+	//72676 <
+	minumunOrder = (BigDecimal) values.get("minumunOrder");
+	msgOrdineMinimo = (String) values.get("msgOrdineMinimo");
+	//72676 >
 	deliveryMethods = (JSONObject) values.get("deliveryMethods");
 	salesConditionsPDFKey = (String) values.get("salesConditionsPDFKey");
 	deliveryMethods = (JSONObject) values.get("deliveryMethods");
@@ -350,6 +358,9 @@ try {
     var items = <%=YUserPortalSession.getNumeroItemsCarrelloUtente(userPortalSession.getIdAzienda(), userPortalSession.getIdUtente())%>;
     var company = "<%=userPortalSession.getIdAzienda()%>";
     var idCliente = "<%=userPortalSession.getIdCliente()%>";
+    var total = "<%=total.toPlainString()%>";
+    var minumunOrder = "<%=minumunOrder.toPlainString()%>";
+    var msgOrdineMinimo = "<%=msgOrdineMinimo%>";
 
     $(document).ready(function() {
         // Initialize your JavaScript file

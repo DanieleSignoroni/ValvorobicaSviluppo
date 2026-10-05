@@ -376,9 +376,15 @@ function populateDatiDestinazione() {
 function initLocationAutocomplete() {
 	var $inputs = $('.location-search');
 	var $results = $('#locationAutocompleteResults');
+	var defaultLocation = {
+		CAP: $('#CAP').val(),
+		Localita: $('#Localita').val(),
+		Provincia: $('#Provincia').val()
+	};
 	var queryCache = {};
 	var pendingRequest = null;
 	var debounceTimer = null;
+	var locationChanged = false;
 
 	function closeResults() {
 		$results.empty();
@@ -389,11 +395,38 @@ function initLocationAutocomplete() {
 		$('#CAP').val(location.CAP || '');
 		$('#Localita').val(location.localita || '');
 		$('#Provincia').val(location.idProvincia || '');
+		locationChanged = false;
+		$inputs.each(function() { this.setCustomValidity(''); });
+		closeResults();
+	}
+
+	function restoreDefaultLocation() {
+		if (!locationChanged) {
+			return;
+		}
+		clearTimeout(debounceTimer);
+		if (pendingRequest) {
+			pendingRequest.abort();
+			pendingRequest = null;
+		}
+		$('#CAP').val(defaultLocation.CAP);
+		$('#Localita').val(defaultLocation.Localita);
+		$('#Provincia').val(defaultLocation.Provincia);
+		locationChanged = false;
+		$inputs.each(function() { this.setCustomValidity(''); });
 		closeResults();
 	}
 
 	function showResults(locations) {
 		closeResults();
+		var containerBounds = $results.parent()[0].getBoundingClientRect();
+		var capBounds = document.getElementById('CAP').getBoundingClientRect();
+		var provinciaBounds = document.getElementById('Provincia').getBoundingClientRect();
+		$results.css({
+			left: capBounds.left - containerBounds.left,
+			right: 'auto',
+			width: provinciaBounds.right - capBounds.left
+		});
 		locations.forEach(function(location) {
 			var label = [location.CAP, location.localita, location.idProvincia]
 				.filter(function(value) { return value; }).join(' - ');
@@ -448,6 +481,10 @@ function initLocationAutocomplete() {
 
 	$inputs.on('input', function() {
 		var query = $.trim(this.value);
+		locationChanged = true;
+		$inputs.each(function() {
+			this.setCustomValidity("Selezionare una localita' dall'elenco proposto.");
+		});
 		clearTimeout(debounceTimer);
 		if (pendingRequest) {
 			pendingRequest.abort();
@@ -465,8 +502,8 @@ function initLocationAutocomplete() {
 	});
 
 	$(document).on('mousedown', function(event) {
-		if (!$(event.target).closest('.location-autocomplete').length) {
-			closeResults();
+		if (!$(event.target).closest('.location-search, #locationAutocompleteResults').length) {
+			restoreDefaultLocation();
 		}
 	});
 }

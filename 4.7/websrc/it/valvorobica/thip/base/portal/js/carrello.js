@@ -419,6 +419,14 @@ function initLocationAutocomplete() {
 
 	function showResults(locations) {
 		closeResults();
+		var containerBounds = $results.parent()[0].getBoundingClientRect();
+		var capBounds = document.getElementById('CAP').getBoundingClientRect();
+		var provinciaBounds = document.getElementById('Provincia').getBoundingClientRect();
+		$results.css({
+			left: capBounds.left - containerBounds.left,
+			right: 'auto',
+			width: provinciaBounds.right - capBounds.left
+		});
 		locations.forEach(function(location) {
 			var label = [location.CAP, location.localita, location.idProvincia]
 				.filter(function(value) { return value; }).join(' - ');

@@ -102,7 +102,7 @@ try {
 <style>
 .location-autocomplete { position: relative; }
 .location-autocomplete-results {
-	position: absolute; z-index: 1060; top: 100%; right: 0; left: 0;
+	position: absolute; z-index: 1060; top: 100%; right: 0; left: 25%;
 	max-height: 240px; overflow-y: auto; background: #fff;
 	border: 1px solid #ced4da; border-radius: 0 0 .25rem .25rem;
 	box-shadow: 0 .25rem .5rem rgba(0, 0, 0, .15);
@@ -245,7 +245,7 @@ try {
 		</div>
 					<div id="modalWarningCheckOut" class="modal fade">
   <div class="modal-dialog modal-confirm">
-    <form id="checkoutForm">
+    <form id="checkoutForm" autocomplete="off">
       <div class="modal-content">
         <div class="modal-body" id="summarySection">
         </div>
@@ -266,16 +266,16 @@ try {
 	       </div>
           <div class="row mt-4">
             <div class="col">
-              <label class="form-label">Modalit� di consegna</label>
-              <select class="form-select mb-2" name="deliveryMethod" id="deliveryMethod" required disabled></select>
-              <input type="hidden" name="IdModalitaConsegna" id="IdModalitaConsegnaHiddenInputValue">
-            </div>
+          <div class="row location-autocomplete">
+              <input class="form-control" type="text" name="Indirizzo" id="Indirizzo" required autocomplete="new-password" data-lpignore="true" data-1p-ignore>
             <div class="col">
-              <label class="form-label">Modalit� di spedizione</label>
-              <select class="form-select mb-2" name="IdModalitaSpedizione" id="shipmentMethod" required></select>
-              <input type="hidden" name="IdModalitaSpedizione" id="IdModalitaSpedizioneHiddenInputValue">
-            </div>
-            <div class="col" style="display:none;">
+              <input class="form-control location-search" type="text" name="CAP" id="CAP" required autocomplete="new-password" data-lpignore="true" data-1p-ignore aria-autocomplete="list" aria-controls="locationAutocompleteResults">
+            <div class="col">
+              <input class="form-control location-search" type="text" name="Localita" id="Localita" required autocomplete="new-password" data-lpignore="true" data-1p-ignore aria-autocomplete="list" aria-controls="locationAutocompleteResults">
+            <div class="col">
+              <input class="form-control location-search" type="text" name="Provincia" id="Provincia" required autocomplete="new-password" data-lpignore="true" data-1p-ignore aria-autocomplete="list" aria-controls="locationAutocompleteResults">
+            <div id="locationAutocompleteResults" class="location-autocomplete-results" role="listbox" aria-label="Località disponibili"></div>
+          <input name="Email" id="Email" class="form-control mt-2" type="text" inputmode="email" placeholder="Email" required autocomplete="new-password" data-lpignore="true" data-1p-ignore />
               <label class="form-label">Vettore</label>
 					<!-- 72578 remmo il required -->
 				    <!-- <select class="form-select mb-2" name="IdVettore1" id="shipper" required></select> -->
@@ -292,13 +292,13 @@ try {
               <input class="form-control location-search" type="text" name="CAP" id="CAP" required autocomplete="off" aria-autocomplete="list" aria-controls="locationAutocompleteResults">
             </div>
             <div class="col location-autocomplete">
-              <label class="form-label">Localit�</label>
+              <label class="form-label">Località </label>
               <input class="form-control location-search" type="text" name="Localita" id="Localita" required autocomplete="off" aria-autocomplete="list" aria-controls="locationAutocompleteResults">
             </div>
             <div class="col location-autocomplete">
               <label class="form-label">Provincia</label>
               <input class="form-control location-search" type="text" name="Provincia" id="Provincia" required autocomplete="off" aria-autocomplete="list" aria-controls="locationAutocompleteResults">
-              <div id="locationAutocompleteResults" class="location-autocomplete-results" role="listbox" aria-label="Località disponibili"></div>
+              <div id="locationAutocompleteResults" class="location-autocomplete-results" role="listbox" aria-label="LocalitÃ  disponibili"></div>
             </div>
           </div>
           <input name="vsNr" id="vsNr" class="form-control mt-2" placeholder="Vs. Numero Ordine" required maxlength="15" />
